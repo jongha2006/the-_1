@@ -1,0 +1,4 @@
+# Run Caddy on the grader host; replace judge.example.com with its real DNS name.
+judge.example.com {
+    reverse_proxy 127.0.0.1:4100
+}

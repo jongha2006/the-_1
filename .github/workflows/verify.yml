@@ -1,0 +1,17 @@
+name: Verify game and isolated grader
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test tests/*.test.mjs
+      - run: docker pull node:24-alpine
+      - run: node --test tests/docker.test.mjs
+        env:
+          RUN_DOCKER_TESTS: '1'
