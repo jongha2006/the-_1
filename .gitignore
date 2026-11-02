@@ -1,0 +1,27 @@
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Generated outputs
+dist/
+build/
+.next/
+coverage/
+*.log
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Local editor configuration
+.idea/
+*.swp
