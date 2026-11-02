@@ -1,6 +1,9 @@
 import {dockerAvailable,grade as localGrade} from './grader.mjs';
 import {configuredSecret} from './security.mjs';
 export function createGradingClient(env=process.env){
+ if(env.GRADER_MODE==='wasm'){
+  return {isReady:async()=>{const {wasmReady}=await import('./wasm-grader.mjs');return wasmReady();},grade:async code=>{const {gradeWasm}=await import('./wasm-grader.mjs');return gradeWasm(code);},remote:false};
+ }
  let base;
  if(env.GRADER_URL){base=new URL(env.GRADER_URL);if(base.username||base.password||base.search||base.hash||base.pathname!=='/')throw Error('GRADER_URL must be an origin');if(base.protocol!=='https:'&&!(base.protocol==='http:'&&(env.NODE_ENV!=='production'||env.GRADER_ALLOW_HTTP==='1')))throw Error('GRADER_URL requires HTTPS or explicitly private HTTP');if(!configuredSecret(env.GRADER_KEY))throw Error('GRADER_KEY must be at least 32 characters');}
  let available=false,checked=0,pending;

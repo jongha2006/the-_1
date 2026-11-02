@@ -17,6 +17,8 @@ test('Vercel exports only static files; API proxy bypasses caching without embed
 });
 test('deployment rejects missing settings and non-HTTPS proxy origins',()=>{
  assert.throws(()=>deploymentConfig({}));assert.throws(()=>deploymentConfig({GAME_API_ORIGIN:'http://api.test',GAME_ORIGIN_SECRET:key}));assert.throws(()=>deploymentConfig({GAME_API_ORIGIN:'https://api.test/path',GAME_ORIGIN_SECRET:key}));assert.throws(()=>validateProduction({NODE_ENV:'production'}));
+ assert.doesNotThrow(()=>validateProduction({NODE_ENV:'production',DEMO_DEPLOYMENT:'1',GRADER_MODE:'wasm',PUBLIC_ORIGIN:'https://demo.onrender.com',SECURITY_GAME_DB:join(tmpdir(),'demo.sqlite')}));
+ assert.throws(()=>validateProduction({NODE_ENV:'production',DEMO_DEPLOYMENT:'1',GRADER_MODE:'docker',PUBLIC_ORIGIN:'https://demo.onrender.com',SECURITY_GAME_DB:join(tmpdir(),'demo.sqlite')}));
  assert.equal(sameSecret('x',key),false);assert.equal(sameSecret(key,key),true);
  const req={headers:{'x-real-ip':'203.0.113.1'},socket:{remoteAddress:'127.0.0.1'}};assert.equal(clientIP(req,false),'127.0.0.1');assert.equal(clientIP(req,true),'203.0.113.1');
 });

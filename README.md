@@ -2,11 +2,15 @@
 
 the 해커톤_1의 보안 당직 게임입니다. 저장소 협업 방법은 [CONTRIBUTING.md](CONTRIBUTING.md)를 따릅니다.
 
+**카드 등록 없는 최소 무료 작동 검증은 [FREE-DEMO.md](FREE-DEMO.md)를 참고하세요.** Render 무료 서비스 한 개에서 화면·API·SQLite·WASM 채점을 실행하며, 재시작 시 데이터는 초기화될 수 있습니다. Vercel은 이 첫 시험 배포의 필수 조건이 아닙니다.
+
 매일 21:00~21:25 (한국 시간)에 함께 가상 서비스를 복구하는 DB 기반 웹 게임 프로토타입입니다. Node.js 24와 내장 SQLite를 사용하며, 화면 글꼴은 Google Fonts의 Noto Sans KR을 불러옵니다(네트워크 연결이 없으면 시스템 글꼴로 대체).
 
 ## 실행
 
 프로젝트 폴더에서 Node.js 24 이상으로 실행하세요.
+
+먼저 `npm ci --ignore-scripts`로 고정 버전의 WASM 채점 의존성을 설치합니다.
 
 ```powershell
 node server.mjs --demo
@@ -115,7 +119,7 @@ node --test tests/*.test.mjs
 
 ## 온라인 배포 준비
 
-**Vercel + 게임 API/DB + 별도 채점 서버 배포 절차는 [DEPLOYMENT.md](DEPLOYMENT.md)를 참고하세요.** `deploy/`에 Docker Compose·HTTPS·서비스·환경 변수 예제가 있고 `.github/workflows/verify.yml`에서 Docker 채점까지 검증합니다. 외부 계정 연결, 유료 서버 생성, DNS와 운영 환경 변수 설정은 아직 별도 단계입니다.
+**최소 무료 데모는 [FREE-DEMO.md](FREE-DEMO.md), 영구 DB와 분리 Docker 서버를 갖춘 운영 구성은 [DEPLOYMENT.md](DEPLOYMENT.md)를 참고하세요.** `.github/workflows/verify.yml`에서 WASM·Docker 채점까지 검증합니다. 외부 서비스 계정 연결과 실제 배포는 별도 단계입니다.
 
 GitHub는 필수가 아닙니다. 코드를 직접 서버에 올려도 배포할 수 있습니다. GitHub와 연결하면 변경 이력과 자동 배포를 관리하기 편합니다. GitHub Pages 같은 정적 파일 호스팅만으로는 이 Node 서버와 SQLite, Docker 채점기를 실행할 수 없습니다.
 

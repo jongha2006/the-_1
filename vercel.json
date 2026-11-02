@@ -2,5 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "buildCommand": "node scripts/build-vercel.mjs",
-  "installCommand": "npm install --ignore-scripts --package-lock=false"
+  "installCommand": "npm ci --ignore-scripts"
 }

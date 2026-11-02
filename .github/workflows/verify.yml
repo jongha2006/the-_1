@@ -10,6 +10,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - run: npm ci --ignore-scripts
       - run: node --test tests/*.test.mjs
       - run: docker pull node:24-alpine
       - run: node --test tests/docker.test.mjs

@@ -6,10 +6,11 @@ export function sameSecret(actual,expected){if(typeof actual!=='string'||!expect
 export const configuredSecret=value=>typeof value==='string'&&value.length>=32&&!/REPLACE|CHANGEME|EXAMPLE/i.test(value);
 export function validateProduction(env){
  if(env.NODE_ENV!=='production')return;
+ const demo=env.DEMO_DEPLOYMENT==='1'&&env.GRADER_MODE==='wasm';
  if(!env.PUBLIC_ORIGIN)throw Error('Production requires HTTPS PUBLIC_ORIGIN');const origin=new URL(env.PUBLIC_ORIGIN);
  if(origin.protocol!=='https:'||origin.username||origin.password||origin.search||origin.hash||origin.pathname!=='/')throw Error('Production requires a bare HTTPS PUBLIC_ORIGIN');
- if(!configuredSecret(env.GAME_ORIGIN_SECRET))throw Error('Production requires GAME_ORIGIN_SECRET of at least 32 characters');
- if(!env.GRADER_URL||!configuredSecret(env.GRADER_KEY))throw Error('Production requires remote GRADER_URL and GRADER_KEY');
+ if(!demo&&!configuredSecret(env.GAME_ORIGIN_SECRET))throw Error('Production requires GAME_ORIGIN_SECRET of at least 32 characters');
+ if(!demo&&(!env.GRADER_URL||!configuredSecret(env.GRADER_KEY)))throw Error('Production requires remote GRADER_URL and GRADER_KEY');
  if(!env.SECURITY_GAME_DB||!isAbsolute(env.SECURITY_GAME_DB))throw Error('Production requires an absolute persistent SECURITY_GAME_DB path');
 }
 export function clientIP(req,proxyVerified){const forwarded=req.headers['x-real-ip'];return proxyVerified&&typeof forwarded==='string'&&isIP(forwarded)?forwarded:req.socket.remoteAddress;}
