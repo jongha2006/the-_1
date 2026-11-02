@@ -1,27 +1,25 @@
-# Local environment and credentials
+data/
+node_modules/
+*.log
 .env
 .env.*
 !.env.example
+deploy/.env*
+!deploy/.env.*.example
+.vercel/
+*.pem
+*.key
+# Preserve shared repository defaults
 !.env.sample
-
-# Dependencies
-node_modules/
 .venv/
 venv/
 __pycache__/
 *.py[cod]
-
-# Generated outputs
 dist/
 build/
 .next/
 coverage/
-*.log
-
-# Operating system
 .DS_Store
 Thumbs.db
-
-# Local editor configuration
 .idea/
 *.swp

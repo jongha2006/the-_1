@@ -1,0 +1,8 @@
+.git
+data
+.env*
+deploy/.env*
+node_modules
+.vercel
+tests
+*.log

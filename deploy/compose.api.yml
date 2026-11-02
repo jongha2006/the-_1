@@ -1,0 +1,44 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs: ["/tmp:size=16m,noexec,nosuid"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 128
+    mem_limit: 512m
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      SECURITY_GAME_DB: /data/game.sqlite
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set the Vercel public HTTPS origin}
+      GAME_ORIGIN_SECRET: ${GAME_ORIGIN_SECRET:?Set the shared origin secret}
+      GRADER_URL: ${GRADER_URL:?Set the HTTPS grader origin}
+      GRADER_KEY: ${GRADER_KEY:?Set the separate grader key}
+    volumes: ["game-data:/data"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?Set the API domain with DNS pointing to this host}
+      ACME_EMAIL: ${ACME_EMAIL:?Set the certificate contact email}
+    volumes:
+      - ./Caddyfile.api:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [api]
+volumes:
+  game-data:
+  caddy-data:
+  caddy-config:

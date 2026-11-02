@@ -1,0 +1,23 @@
+[Unit]
+Description=Security Shift isolated grading worker
+After=docker.service
+Requires=docker.service
+
+[Service]
+WorkingDirectory=%h/security-shift
+EnvironmentFile=%h/.config/security-shift/grader.env
+Environment=DOCKER_HOST=unix://%t/docker.sock
+ExecStart=/usr/bin/node %h/security-shift/worker.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+RestrictSUIDSGID=true
+LockPersonality=true
+UMask=0077
+MemoryMax=256M
+
+[Install]
+WantedBy=default.target

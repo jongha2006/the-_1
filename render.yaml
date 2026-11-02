@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: security-shift-demo
+    runtime: node
+    plan: free
+    repo: https://github.com/jongha2006/the-_1
+    branch: feat/security-shift-deployment
+    autoDeployTrigger: 'off'
+    buildCommand: npm ci --ignore-scripts
+    startCommand: node server.mjs --demo
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: '24'
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: SECURITY_GAME_DB
+        value: /tmp/security-shift/game.sqlite
+      - key: GRADER_MODE
+        value: wasm
+      - key: DEMO_DEPLOYMENT
+        value: '1'
+      - key: DEMO_FAST
+        value: '1'
